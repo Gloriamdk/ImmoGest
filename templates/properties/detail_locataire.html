@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>{{ locataire.user.username }}</h1>
+        <p>Dossier du locataire.</p>
+    </div>
+
+    <a href="{% url 'properties:liste_locataires' %}" class="btn-secondary">
+        Retour aux locataires
+    </a>
+</section>
+
+<div class="detail-grid">
+    <div class="card">
+        <h2>Coordonnées</h2>
+
+        <p><strong>Email :</strong> {{ locataire.user.email }}</p>
+        <p><strong>Téléphone :</strong> {{ locataire.user.telephone }}</p>
+        <p><strong>Adresse actuelle :</strong> {{ locataire.adresse_actuelle }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Résumé</h2>
+
+        <p><strong>Contrats :</strong> {{ contrats.count }}</p>
+        <p><strong>Paiements :</strong> {{ paiements.count }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Contrats du locataire</h2>
+
+    {% if contrats %}
+    <table>
+        <thead>
+            <tr>
+                <th>Bien</th>
+                <th>Statut</th>
+                <th>Date début</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for contrat in contrats %}
+            <tr>
+                <td>{{ contrat.bien.titre }}</td>
+                <td>{{ contrat.get_statut_display }}</td>
+                <td>{{ contrat.date_debut }}</td>
+                <td>
+                    <a href="{% url 'properties:detail_contrat' contrat.pk %}">
+                        Voir contrat
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Aucun contrat pour ce locataire.</p>
+    {% endif %}
+</div>
+
+<div class="card" style="margin-top: 25px;">
+    <h2>Paiements du locataire</h2>
+
+    {% if paiements %}
+    <table>
+        <thead>
+            <tr>
+                <th>Mois</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for paiement in paiements %}
+            <tr>
+                <td>{{ paiement.mois_concerne }}</td>
+                <td>{{ paiement.montant }} FCFA</td>
+                <td>{{ paiement.get_statut_display }}</td>
+                <td>
+                    <a href="{% url 'payments:detail_paiement' paiement.pk %}">
+                        Voir paiement
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Aucun paiement enregistré pour ce locataire.</p>
+    {% endif %}
+</div>
+{% endblock %}

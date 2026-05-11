@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Biens archivés</h1>
+        <p>Liste des biens retirés de la liste principale.</p>
+    </div>
+
+    <a href="{% url 'properties:liste_biens' %}" class="btn-secondary">
+        Retour aux biens
+    </a>
+</section>
+
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher dans les biens archivés..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+</form>
+
+{% if biens %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Ville</th>
+                <th>Loyer</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for bien in biens %}
+            <tr>
+                <td>{{ bien.titre }}</td>
+                <td>{{ bien.get_type_bien_display }}</td>
+                <td>{{ bien.ville }}</td>
+                <td>{{ bien.loyer_mensuel }} FCFA</td>
+                <td>
+                    <span class="badge {{ bien.statut }}">
+                        {{ bien.get_statut_display }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'properties:restaurer_bien' bien.pk %}">
+                        Restaurer
+                    </a>
+                </td>
+            </tr>
+
+            
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun bien archivé</h2>
+    <p>Les biens archivés apparaîtront ici.</p>
+</div>
+{% endif %}
+{% endblock %}

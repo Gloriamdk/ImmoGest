@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Détail du paiement</h1>
+
+        <p>
+            {{ paiement.contrat.bien.titre }}
+            —
+            {{ paiement.contrat.locataire.user.username }}
+        </p>
+    </div>
+
+    <div>
+        <a href="{% url 'payments:modifier_paiement' paiement.pk %}" class="btn-link">
+            Modifier
+        </a>
+
+        <a href="{% url 'payments:liste_paiements' %}" class="btn-secondary">
+            Retour
+        </a>
+    </div>
+</section>
+
+<div class="detail-grid">
+
+    <div class="card">
+
+        <h2>Informations du paiement</h2>
+
+        <p>
+            <strong>Bien :</strong>
+            {{ paiement.contrat.bien.titre }}
+        </p>
+
+        <p>
+            <strong>Locataire :</strong>
+            {{ paiement.contrat.locataire.user.username }}
+        </p>
+
+        <p>
+            <strong>Mois concerné :</strong>
+            {{ paiement.mois_concerne }}
+        </p>
+
+        <p>
+            <strong>Montant :</strong>
+            {{ paiement.montant }} FCFA
+        </p>
+
+        <p>
+            <strong>Date du paiement :</strong>
+            {{ paiement.date_paiement }}
+        </p>
+
+        <p>
+            <strong>Mode de paiement :</strong>
+            {{ paiement.get_mode_paiement_display }}
+        </p>
+
+        <p>
+            <strong>Statut :</strong>
+
+            <span class="badge">
+                {{ paiement.get_statut_display }}
+            </span>
+        </p>
+
+        {% if paiement.note %}
+            <p>
+                <strong>Note :</strong>
+                {{ paiement.note }}
+            </p>
+        {% endif %}
+
+    </div>
+
+    <div class="card">
+
+        <h2>Contrat associé</h2>
+
+        <p>
+            Consultez le contrat lié à ce paiement.
+        </p>
+
+        <a href="{% url 'properties:detail_contrat' paiement.contrat.pk %}" class="btn-link">
+            Voir le contrat
+        </a>
+
+    </div>
+
+</div>
+{% endblock %}

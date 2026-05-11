@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Contrats archivés</h1>
+        <p>Historique des contrats archivés.</p>
+    </div>
+
+    <a href="{% url 'properties:liste_contrats' %}" class="btn-secondary">
+        Retour aux contrats
+    </a>
+</section>
+
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher dans les archives..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+</form>
+
+{% if contrats %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Bien</th>
+                <th>Locataire</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for contrat in contrats %}
+            <tr>
+                <td>{{ contrat.bien.titre }}</td>
+
+                <td>{{ contrat.locataire.user.username }}</td>
+
+                <td>{{ contrat.get_statut_display }}</td>
+
+                <td>
+                    <a href="{% url 'properties:detail_contrat' contrat.pk %}">
+                        Voir
+                    </a>
+                    |
+                    <a href="{% url 'properties:restaurer_contrat' contrat.pk %}">
+                        Restaurer
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun contrat archivé</h2>
+</div>
+{% endif %}
+{% endblock %}

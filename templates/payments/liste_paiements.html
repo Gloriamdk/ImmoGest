@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Paiements</h1>
+        <p>Suivi des loyers enregistrés.</p>
+    </div>
+
+    <a href="{% url 'payments:ajouter_paiement' %}" class="btn-link">
+        Ajouter un paiement
+    </a>
+</section>
+
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher par bien ou locataire..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+</form>
+
+{% if paiements %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Bien</th>
+                <th>Locataire</th>
+                <th>Mois</th>
+                <th>Montant</th>
+                <th>Date paiement</th>
+                <th>Mode</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for paiement in paiements %}
+            <tr>
+                <td>{{ paiement.contrat.bien.titre }}</td>
+                <td>{{ paiement.contrat.locataire.user.username }}</td>
+                <td>{{ paiement.mois_concerne }}</td>
+                <td>{{ paiement.montant }} FCFA</td>
+                <td>{{ paiement.date_paiement }}</td>
+                <td>{{ paiement.get_mode_paiement_display }}</td>
+                <td>{{ paiement.get_statut_display }}</td>
+                <td>
+                    <a href="{% url 'payments:detail_paiement' paiement.pk %}">
+                        Voir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun paiement enregistré</h2>
+    <p>Ajoutez un premier paiement de loyer.</p>
+
+    <a href="{% url 'payments:ajouter_paiement' %}" class="btn-link">
+        Ajouter un paiement
+    </a>
+</div>
+{% endif %}
+{% endblock %}

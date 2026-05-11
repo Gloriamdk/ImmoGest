@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+
+    <h1>Restaurer ce contrat ?</h1>
+
+    <p>
+        Voulez-vous restaurer ce contrat ?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit">
+            Restaurer
+        </button>
+
+        <a href="{% url 'properties:contrats_archives' %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+
+</div>
+{% endblock %}

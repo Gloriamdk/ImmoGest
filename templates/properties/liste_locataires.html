@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Locataires</h1>
+        <p>Liste des locataires associés à vos contrats.</p>
+    </div>
+
+    <a href="{% url 'properties:ajouter_locataire' %}" class="btn-link">
+    Ajouter un locataire
+</a>
+</section>
+
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher par nom, email ou téléphone..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+</form>
+
+{% if locataires %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for locataire in locataires %}
+            <tr>
+                <td>{{ locataire.user.username }}</td>
+                <td>{{ locataire.user.email }}</td>
+                <td>{{ locataire.user.telephone }}</td>
+                <td>
+                    <a href="{% url 'properties:detail_locataire' locataire.pk %}">
+                        Voir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun locataire trouvé</h2>
+    <p>Les locataires apparaîtront ici lorsqu’ils seront liés à un contrat.</p>
+</div>
+{% endif %}
+{% endblock %}

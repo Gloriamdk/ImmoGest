@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Ajouter un locataire</h1>
+        <p>Créer un compte locataire et l’ajouter au système.</p>
+    </div>
+
+    <a href="{% url 'properties:liste_locataires' %}" class="btn-secondary">
+        Retour
+    </a>
+</section>
+
+<div class="card">
+
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label>Nom d'utilisateur</label>
+            <input type="text" name="username" required>
+        </p>
+
+        <p>
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </p>
+
+        <p>
+            <label>Téléphone</label>
+            <input type="text" name="telephone">
+        </p>
+
+        <p>
+            <label>Adresse actuelle</label>
+            <textarea name="adresse"></textarea>
+        </p>
+
+        <p>
+            <label>Mot de passe temporaire</label>
+            <input type="password" name="password" required>
+        </p>
+
+        <button type="submit">
+            Créer le locataire
+        </button>
+
+    </form>
+
+</div>
+{% endblock %}

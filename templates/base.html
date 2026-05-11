@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ImmoGest</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="{% url 'home' %}">ImmoGest</a>
+    </div>
+
+    <nav>
+        {% if user.is_authenticated %}
+            <a href="{% url 'accounts:dashboard' %}">Dashboard</a>
+
+            {% if user.role == 'proprietaire' %}
+                <a href="{% url 'properties:liste_biens' %}">Biens</a>
+                <a href="{% url 'properties:liste_contrats' %}">Contrats</a>
+                <a href="#">Paiements</a>
+                <a href="#">Maintenance</a>
+            {% endif %}
+
+            {% if user.role == 'locataire' %}
+                <a href="#">Mon logement</a>
+                <a href="{% url 'payments:liste_paiements' %}">Paiements</a>
+                <a href="#">Maintenance</a>
+            {% endif %}
+
+            <a href="{% url 'accounts:profil' %}">Profil</a>
+            <a href="{% url 'accounts:logout' %}">Déconnexion</a>
+        {% else %}
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="{% url 'accounts:login' %}">Connexion</a>
+            <a href="{% url 'accounts:inscription' %}">Inscription</a>
+        {% endif %}
+    </nav>
+</header>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<main class="container">
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
+</html>

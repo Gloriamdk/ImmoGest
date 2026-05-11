@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>{{ bien.titre }}</h1>
+        <p>{{ bien.adresse }}, {{ bien.ville }}</p>
+    </div>
+
+    <div>
+        <a href="{% url 'properties:modifier_bien' bien.pk %}" class="btn-link">
+            Modifier
+        </a>
+
+        <a href="{% url 'properties:archiver_bien' bien.pk %}" class="btn-danger-link">
+            Archiver
+        </a>
+    </div>
+</section>
+
+<div class="detail-grid">
+    <div class="card">
+        <h2>Informations du bien</h2>
+
+        {% if bien.image %}
+            <img src="{{ bien.image.url }}" alt="{{ bien.titre }}" class="property-image">
+        {% endif %}
+
+        <p><strong>Type :</strong> {{ bien.get_type_bien_display }}</p>
+        <p><strong>Superficie :</strong> {{ bien.superficie }} m²</p>
+        <p><strong>Loyer mensuel :</strong> {{ bien.loyer_mensuel }} FCFA</p>
+        <p><strong>Caution :</strong> {{ bien.caution }} FCFA</p>
+        <p>
+            <strong>Statut :</strong>
+            <span class="badge {{ bien.statut }}">
+                {{ bien.get_statut_display }}
+            </span>
+        </p>
+
+        {% if bien.description %}
+            <p><strong>Description :</strong> {{ bien.description }}</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Contrats liés</h2>
+
+        {% if contrats %}
+            <ul>
+                {% for contrat in contrats %}
+                    <li>
+                        {{ contrat.locataire.user.username }}
+                        —
+                        {{ contrat.get_statut_display }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun contrat lié à ce bien pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
+
+<a href="{% url 'properties:liste_biens' %}" class="btn-secondary">
+    Retour aux biens
+</a>
+{% endblock %}

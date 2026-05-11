@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ titre }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Enregistrer
+        </button>
+
+        <a href="{% url 'properties:liste_contrats' %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+</div>
+{% endblock %}

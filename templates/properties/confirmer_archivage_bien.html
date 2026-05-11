@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Archiver ce bien ?</h1>
+
+    <p>
+        Voulez-vous vraiment archiver le bien
+        <strong>{{ bien.titre }}</strong> ?
+    </p>
+
+    <p>
+        Il ne sera plus visible dans la liste principale, mais il ne sera pas supprimé de la base de données.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn-danger">
+            Oui, archiver
+        </button>
+
+        <a href="{% url 'properties:detail_bien' bien.pk %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+</div>
+{% endblock %}

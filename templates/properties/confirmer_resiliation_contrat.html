@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+
+    <h1>Résilier ce contrat ?</h1>
+
+    <p>
+        Voulez-vous vraiment résilier le contrat de
+        <strong>{{ contrat.locataire.user.username }}</strong>
+        pour le bien
+        <strong>{{ contrat.bien.titre }}</strong> ?
+    </p>
+
+    <p>
+        Le bien repassera automatiquement au statut
+        <strong>Libre</strong>.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn-danger">
+            Oui, résilier
+        </button>
+
+        <a href="{% url 'properties:detail_contrat' contrat.pk %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+
+</div>
+{% endblock %}

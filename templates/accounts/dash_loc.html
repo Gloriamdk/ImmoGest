@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div>
+        <h1>Tableau de bord locataire</h1>
+        <p>Bienvenue {{ user.username }}.</p>
+    </div>
+</section>
+
+{% if contrat %}
+<section class="stats-grid">
+    <div class="stat-card">
+        <h3>Logement</h3>
+        <p class="stat-number">{{ contrat.bien.titre }}</p>
+        <span>{{ contrat.bien.get_type_bien_display }}</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Loyer mensuel</h3>
+        <p class="stat-number">{{ contrat.montant_loyer }}</p>
+        <span>FCFA</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Contrat</h3>
+        <p class="stat-number">{{ contrat.get_statut_display }}</p>
+        <span>Statut du bail</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Début du bail</h3>
+        <p class="stat-number">{{ contrat.date_debut }}</p>
+        <span>Date de début</span>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="dashboard-card">
+        <h2>Mon logement</h2>
+        <p>{{ contrat.bien.adresse }}, {{ contrat.bien.ville }}</p>
+        <p>Superficie : {{ contrat.bien.superficie }} m²</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Mon contrat</h2>
+        <p>Consultez les informations principales de votre bail.</p>
+        <a href="#" class="btn-link">Voir mon contrat</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Mes paiements</h2>
+        <p>Consultez l’historique de vos loyers et quittances.</p>
+        <a href="#" class="btn-link">Bientôt disponible</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Maintenance</h2>
+        <p>Envoyez une demande de réparation ou suivez vos tickets.</p>
+        <a href="#" class="btn-link">Bientôt disponible</a>
+    </div>
+</section>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun contrat actif</h2>
+    <p>Aucun logement ne vous est actuellement attribué.</p>
+</div>
+{% endif %}
+{% endblock %}

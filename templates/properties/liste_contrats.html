@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Contrats de bail</h1>
+        <p>Liste des contrats liés à vos biens immobiliers.</p>
+    </div>
+
+    <a href="{% url 'properties:ajouter_contrat' %}" class="btn-link">
+        Nouveau contrat
+    </a>
+</section>
+
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher par bien, locataire ou email..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+
+    <a href="{% url 'properties:contrats_archives' %}" class="btn-secondary">
+        Voir les archives
+    </a>
+</form>
+
+{% if contrats %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Bien</th>
+                <th>Locataire</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Loyer</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for contrat in contrats %}
+            <tr>
+                <td>{{ contrat.bien.titre }}</td>
+
+                <td>
+                    {{ contrat.locataire.user.username }}
+                </td>
+
+                <td>{{ contrat.date_debut }}</td>
+
+                <td>
+                    {% if contrat.date_fin %}
+                        {{ contrat.date_fin }}
+                    {% else %}
+                        CDI
+                    {% endif %}
+                </td>
+
+                <td>
+                    {{ contrat.montant_loyer }} FCFA
+                </td>
+
+                <td>
+                    <span class="badge">
+                        {{ contrat.get_statut_display }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'properties:detail_contrat' contrat.pk %}">
+                        Voir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <h2>Aucun contrat enregistré</h2>
+
+    <p>
+        Créez votre premier contrat de bail.
+    </p>
+
+    <a href="{% url 'properties:ajouter_contrat' %}" class="btn-link">
+        Créer un contrat
+    </a>
+</div>
+{% endif %}
+{% endblock %}

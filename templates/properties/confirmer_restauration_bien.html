@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Restaurer ce bien ?</h1>
+
+    <p>
+        Voulez-vous restaurer le bien
+        <strong>{{ bien.titre }}</strong> ?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit">
+            Oui, restaurer
+        </button>
+
+        <a href="{% url 'properties:biens_archives' %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+</div>
+{% endblock %}

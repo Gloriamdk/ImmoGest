@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Mes biens immobiliers</h1>
+        <p>Liste de tous vos biens enregistrés.</p>
+    </div>
+
+    <a href="{% url 'properties:ajouter_bien' %}" class="btn-link">
+        Ajouter un bien
+    </a>
+    <form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher par titre, adresse ou ville..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">Rechercher</button>
+
+    <a href="{% url 'properties:biens_archives' %}" class="btn-secondary">
+        Voir les archives
+    </a>
+</form>
+
+</section>
+
+{% if biens %}
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Ville</th>
+                <th>Loyer</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for bien in biens %}
+            <tr>
+                <td>{{ bien.titre }}</td>
+                <td>{{ bien.get_type_bien_display }}</td>
+                <td>{{ bien.ville }}</td>
+                <td>{{ bien.loyer_mensuel }} FCFA</td>
+                <td>
+                    <span class="badge {{ bien.statut }}">
+                        {{ bien.get_statut_display }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'properties:detail_bien' bien.pk %}">
+                        Voir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <h2>Aucun bien enregistré</h2>
+    <p>Commencez par ajouter votre premier bien immobilier.</p>
+    <a href="{% url 'properties:ajouter_bien' %}" class="btn-link">
+        Ajouter un bien
+    </a>
+</div>
+{% endif %}
+{% endblock %}

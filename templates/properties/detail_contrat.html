@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Contrat de bail</h1>
+        <p>
+            {{ contrat.bien.titre }}
+            —
+            {{ contrat.locataire.user.username }}
+        </p>
+    </div>
+
+    <div>
+        <a href="{% url 'properties:modifier_contrat' contrat.pk %}" class="btn-link">
+            Modifier
+        </a>
+
+        <a href="{% url 'properties:resilier_contrat' contrat.pk %}" class="btn-danger-link">
+            Résilier
+        </a>
+    </div>
+</section>
+
+<div class="detail-grid">
+
+    <div class="card">
+        <h2>Informations du contrat</h2>
+
+        <p>
+            <strong>Bien :</strong>
+            {{ contrat.bien.titre }}
+        </p>
+
+        <p>
+            <strong>Locataire :</strong>
+            {{ contrat.locataire.user.username }}
+        </p>
+
+        <p>
+            <strong>Date début :</strong>
+            {{ contrat.date_debut }}
+        </p>
+
+        <p>
+            <strong>Date fin :</strong>
+
+            {% if contrat.date_fin %}
+                {{ contrat.date_fin }}
+            {% else %}
+                CDI
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Loyer :</strong>
+            {{ contrat.montant_loyer }} FCFA
+        </p>
+
+        <p>
+            <strong>Caution :</strong>
+            {{ contrat.montant_caution }} FCFA
+        </p>
+
+        <p>
+            <strong>Statut :</strong>
+
+            <span class="badge">
+                {{ contrat.get_statut_display }}
+            </span>
+        </p>
+
+        {% if contrat.notes %}
+            <p>
+                <strong>Notes :</strong>
+                {{ contrat.notes }}
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Document</h2>
+
+        {% if contrat.document %}
+            <a href="{{ contrat.document.url }}" target="_blank" class="btn-link">
+                Voir le contrat PDF
+            </a>
+        {% else %}
+            <p>Aucun document ajouté.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'properties:archiver_contrat' contrat.pk %}" class="btn-danger-link">
+        Archiver le contrat
+    </a>
+</div>
+
+{% endblock %}

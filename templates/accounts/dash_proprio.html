@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div>
+        <h1>Tableau de bord propriétaire</h1>
+        <p>Bienvenue {{ user.username }}. Voici un aperçu de votre activité immobilière.</p>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <h3>Total biens</h3>
+        <p class="stat-number">{{ total_biens }}</p>
+        <span>Biens enregistrés</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Contrats actifs</h3>
+        <p class="stat-number">{{ contrats_actifs }}</p>
+        <span>Baux en cours</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Paiements reçus</h3>
+        <p class="stat-number">{{ total_paiements }} FCFA</p>
+        <span>Loyers confirmés</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>Retards</h3>
+        <p class="stat-number">{{ paiements_en_retard }}</p>
+        <span>Paiements en retard</span>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="dashboard-card">
+        <h2>Gestion des biens</h2>
+        <p>Ajoutez, modifiez, archivez et suivez vos biens immobiliers.</p>
+        <a href="{% url 'properties:liste_biens' %}" class="btn-link">Gérer les biens</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Contrats de bail</h2>
+        <p>Créez, consultez, modifiez, résiliez et archivez vos contrats.</p>
+        <a href="{% url 'properties:liste_contrats' %}" class="btn-link">Voir les contrats</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Paiements</h2>
+        <p>Enregistrez les loyers, suivez les retards et préparez les quittances.</p>
+        <a href="{% url 'payments:liste_paiements' %}" class="btn-link">Suivre les paiements</a>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Maintenance</h2>
+        <p>Consultez les réclamations envoyées par vos locataires.</p>
+        <a href="#" class="btn-link">Bientôt disponible</a>
+    </div>
+</section>
+{% endblock %}
