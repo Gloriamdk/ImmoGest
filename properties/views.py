@@ -411,3 +411,19 @@ def ajouter_locataire(request):
         return redirect('properties:liste_locataires')
 
     return render(request, 'properties/ajouter_locataire.html')
+
+@login_required
+def mon_contrat(request):
+    if request.user.role != 'locataire':
+        return redirect('accounts:dashboard')
+
+    locataire = request.user.profil_locataire
+
+    contrats = ContratBail.objects.filter(
+        locataire=locataire,
+        is_archived=False
+    )
+
+    return render(request, 'properties/mon_contrat.html', {
+        'contrats': contrats
+    })

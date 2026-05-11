@@ -45,13 +45,17 @@
     <div class="dashboard-card">
         <h2>Mon contrat</h2>
         <p>Consultez les informations principales de votre bail.</p>
-        <a href="#" class="btn-link">Voir mon contrat</a>
+        <a href="{% url 'properties:mon_contrat' %}" class="action-btn">
+            Voir mon contrat
+        </a>
     </div>
 
     <div class="dashboard-card">
         <h2>Mes paiements</h2>
         <p>Consultez l’historique de vos loyers et quittances.</p>
-        <a href="#" class="btn-link">Bientôt disponible</a>
+        <a href="{% url 'payments:mes_paiements' %}" class="action-btn">
+            Voir mes paiements
+        </a>
     </div>
 
     <div class="dashboard-card">

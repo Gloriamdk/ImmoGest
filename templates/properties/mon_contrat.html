@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Mon contrat</h1>
+
+{% for contrat in contrats %}
+    <div class="card">
+        <h3>{{ contrat.bien.titre }}</h3>
+        <p><strong>Adresse :</strong> {{ contrat.bien.adresse }}</p>
+        <p><strong>Ville :</strong> {{ contrat.bien.ville }}</p>
+        <p><strong>Loyer :</strong> {{ contrat.montant_loyer }} FCFA</p>
+        <p><strong>Caution :</strong> {{ contrat.montant_caution }} FCFA</p>
+        <p><strong>Date début :</strong> {{ contrat.date_debut }}</p>
+        <p><strong>Date fin :</strong> {{ contrat.date_fin }}</p>
+        <p><strong>Statut :</strong> {{ contrat.get_statut_display }}</p>
+    </div>
+{% empty %}
+    <p>Aucun contrat trouvé.</p>
+{% endfor %}
+
+<a href="{% url 'accounts:dashboard' %}" class="action-btn">Retour</a>
+
+{% endblock %}

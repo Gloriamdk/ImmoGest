@@ -83,9 +83,24 @@
                 <td>{{ paiement.mois_concerne }}</td>
                 <td>{{ paiement.montant }} FCFA</td>
                 <td>{{ paiement.get_statut_display }}</td>
+                
+                <form method="post" action="{% url 'payments:marquer_paiement_mois' contrat.pk %}">
+                    {% csrf_token %}
+
+                    <label>Date de paiement</label>
+                    <input type="date" name="date_paiement" required>
+
+                    <button type="submit" class="action-btn">
+                        Confirmer le paiement
+                    </button>
+                </form>
+
                 <td>
                     <a href="{% url 'payments:detail_paiement' paiement.pk %}">
                         Voir paiement
+                    </a>
+                    <a href="{% url 'payments:paiements_locataire' locataire.pk %}" class="action-btn">
+                        Voir l'historique des paiements
                     </a>
                 </td>
             </tr>

@@ -18,17 +18,20 @@
         {% if user.is_authenticated %}
             <a href="{% url 'accounts:dashboard' %}">Dashboard</a>
 
+
+
             {% if user.role == 'proprietaire' %}
                 <a href="{% url 'properties:liste_biens' %}">Biens</a>
                 <a href="{% url 'properties:liste_contrats' %}">Contrats</a>
                 <a href="{% url 'properties:liste_locataires' %}">Locataires</a>
-                <a href="#">Paiements</a>
+                <a href="{% url 'payments:liste_paiements' %}">Paiements</a>
                 <a href="#">Maintenance</a>
             {% endif %}
 
             {% if user.role == 'locataire' %}
                 <a href="#">Mon logement</a>
-                <a href="{% url 'payments:liste_paiements' %}">Paiements</a>
+                <a href="{% url 'properties:mon_contrat' %}">Mon contrat</a>
+                <a href="{% url 'payments:mes_paiements' %}">Mes paiements</a>
                 <a href="#">Maintenance</a>
             {% endif %}
 
