@@ -21,6 +21,7 @@
             {% if user.role == 'proprietaire' %}
                 <a href="{% url 'properties:liste_biens' %}">Biens</a>
                 <a href="{% url 'properties:liste_contrats' %}">Contrats</a>
+                <a href="{% url 'properties:liste_locataires' %}">Locataires</a>
                 <a href="#">Paiements</a>
                 <a href="#">Maintenance</a>
             {% endif %}

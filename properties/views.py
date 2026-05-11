@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from accounts.models import ProfilLocataire
-from accounts.models import ProfilLocataire
 from payments.models import Paiement
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.decorators import proprietaire_required
@@ -178,7 +178,6 @@ def contrats_archives(request):
         'query': query
     })
 
-
 @login_required
 @proprietaire_required
 def ajouter_contrat(request):
@@ -187,6 +186,7 @@ def ajouter_contrat(request):
     if request.method == 'POST':
         form = ContratBailForm(request.POST, request.FILES)
         form.fields['bien'].queryset = Bien.objects.filter(proprietaire=profil, is_archived=False)
+        form.fields['locataire'].queryset = ProfilLocataire.objects.filter(proprietaire=profil)
 
         if form.is_valid():
             contrat = form.save()
@@ -199,12 +199,12 @@ def ajouter_contrat(request):
     else:
         form = ContratBailForm()
         form.fields['bien'].queryset = Bien.objects.filter(proprietaire=profil, is_archived=False)
+        form.fields['locataire'].queryset = ProfilLocataire.objects.filter(proprietaire=profil)
 
     return render(request, 'properties/form_contrat.html', {
         'form': form,
         'titre': 'Créer un contrat'
     })
-
 
 @login_required
 @proprietaire_required
@@ -299,23 +299,20 @@ def restaurer_contrat(request, pk):
     return render(request, 'properties/confirmer_restauration_contrat.html', {
         'contrat': contrat
     })
+
 @login_required
 @proprietaire_required
 def liste_locataires(request):
-    profil = request.user.profil_proprietaire
+    proprietaire = request.user.profil_proprietaire
     query = request.GET.get('q', '')
 
-    locataires = ProfilLocataire.objects.filter(
-        contrats__bien__proprietaire=profil
-    ).distinct()
+    locataires = ProfilLocataire.objects.filter(proprietaire=proprietaire)
 
     if query:
         locataires = locataires.filter(
-            user__username__icontains=query
-        ) | locataires.filter(
-            user__email__icontains=query
-        ) | locataires.filter(
-            user__telephone__icontains=query
+            Q(user__username__icontains=query) |
+            Q(user__email__icontains=query) |
+            Q(user__telephone__icontains=query)
         )
 
     return render(request, 'properties/liste_locataires.html', {
@@ -327,22 +324,22 @@ def liste_locataires(request):
 @login_required
 @proprietaire_required
 def detail_locataire(request, pk):
-    profil = request.user.profil_proprietaire
+    proprietaire = request.user.profil_proprietaire
 
     locataire = get_object_or_404(
         ProfilLocataire,
         pk=pk,
-        contrats__bien__proprietaire=profil
+        proprietaire=proprietaire
     )
 
     contrats = ContratBail.objects.filter(
         locataire=locataire,
-        bien__proprietaire=profil
+        bien__proprietaire=proprietaire
     )
 
     paiements = Paiement.objects.filter(
         contrat__locataire=locataire,
-        contrat__bien__proprietaire=profil
+        contrat__bien__proprietaire=proprietaire
     )
 
     return render(request, 'properties/detail_locataire.html', {
@@ -353,12 +350,40 @@ def detail_locataire(request, pk):
 
 @login_required
 @proprietaire_required
-def ajouter_locataire(request):
+def modifier_locataire(request, pk):
+    proprietaire = request.user.profil_proprietaire
 
+    locataire = get_object_or_404(
+        ProfilLocataire,
+        pk=pk,
+        proprietaire=proprietaire
+    )
+
+    if request.method == 'POST':
+        user = locataire.user
+
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.telephone = request.POST.get('telephone')
+        user.save()
+
+        locataire.adresse_actuelle = request.POST.get('adresse')
+        locataire.save()
+
+        messages.success(request, "Locataire modifié avec succès.")
+        return redirect('properties:detail_locataire', pk=locataire.pk)
+
+    return render(request, 'properties/modifier_locataire.html', {
+        'locataire': locataire
+    })    
+
+@login_required
+@proprietaire_required
+def ajouter_locataire(request):
+    proprietaire = request.user.profil_proprietaire
     User = get_user_model()
 
     if request.method == 'POST':
-
         username = request.POST.get('username')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -366,12 +391,7 @@ def ajouter_locataire(request):
         password = request.POST.get('password')
 
         if User.objects.filter(username=username).exists():
-
-            messages.error(
-                request,
-                "Ce nom d'utilisateur existe déjà."
-            )
-
+            messages.error(request, "Ce nom d'utilisateur existe déjà.")
             return redirect('properties:ajouter_locataire')
 
         user = User.objects.create_user(
@@ -382,18 +402,12 @@ def ajouter_locataire(request):
             telephone=telephone
         )
 
-        profil = user.profil_locataire
-        profil.adresse_actuelle = adresse
-        profil.save()
+        profil_locataire = user.profil_locataire
+        profil_locataire.proprietaire = proprietaire
+        profil_locataire.adresse_actuelle = adresse
+        profil_locataire.save()
 
-        messages.success(
-            request,
-            "Locataire créé avec succès."
-        )
-
+        messages.success(request, "Locataire créé avec succès.")
         return redirect('properties:liste_locataires')
 
-    return render(
-        request,
-        'properties/ajouter_locataire.html'
-    )
+    return render(request, 'properties/ajouter_locataire.html')

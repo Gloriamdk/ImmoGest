@@ -14,6 +14,14 @@ urlpatterns = [
 
     path('biens/<int:pk>/', views.detail_bien, name='detail_bien'),
 
+    path('locataires/', views.liste_locataires, name='liste_locataires'),
+
+    path('locataires/ajouter/', views.ajouter_locataire, name='ajouter_locataire'),
+
+    path('locataires/<int:pk>/', views.detail_locataire, name='detail_locataire'),
+
+    path('locataires/<int:pk>/modifier/', views.modifier_locataire, name='modifier_locataire'),
+    
     path(
         'biens/<int:pk>/modifier/',
         views.modifier_bien,

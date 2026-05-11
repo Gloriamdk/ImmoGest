@@ -312,3 +312,17 @@ th {
 .search-form input {
     flex: 1;
 }
+
+.btn-secondary {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
