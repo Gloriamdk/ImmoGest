@@ -1,28 +1,35 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<section class="hero-section">
-    <div class="hero-content">
 
-        <h1>Gérez vos biens, contrats et loyers en toute simplicité.</h1>
+<section class="hero-background">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <span class="hero-tag"></span>
+
+        <h1>
+            Une gestion immobilière simple, claire et professionnelle.
+        </h1>
 
         <p>
-            ImmoGest aide les propriétaires et locataires à suivre les locations,
-            les paiements, les contrats et les demandes de maintenance depuis un seul espace.
+            Centralisez vos biens, contrats, locataires, paiements et demandes de maintenance dans un espace moderne conçu pour les propriétaires.
         </p>
 
-        <div class="hero-actions">
+        <div class="hero-buttons">
             {% if user.is_authenticated %}
-                <a href="{% url 'accounts:dashboard' %}" class="btn-link">
-                    Accéder au tableau de bord
+                <a href="{% url 'accounts:dashboard' %}" class="btn-dark">
+                    Dashboard
                 </a>
             {% else %}
-                <a href="{% url 'accounts:inscription' %}" class="btn-link">
-                    Inscrivez-vous
+                <a href="{% url 'accounts:login' %}" class="btn-dark">
+                    Connexion
                 </a>
 
-                <a href="{% url 'accounts:login' %}" class="btn-outline">
-                    Se connecter
+                <a href="{% url 'accounts:inscription' %}" class="btn-light">
+                    Commencer
                 </a>
             {% endif %}
         </div>
@@ -30,25 +37,4 @@
 
 </section>
 
-<section class="features-grid">
-    <div class="feature-card">
-        <h3>Biens immobiliers</h3>
-        <p>Ajoutez vos appartements, studios, villas ou maisons avec statut libre, loué ou en travaux.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Contrats de bail</h3>
-        <p>Associez chaque locataire à son logement et gardez un historique clair des contrats.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Paiements</h3>
-        <p>Suivez les loyers, avances, cautions et quittances.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Maintenance</h3>
-        <p>Les locataires peuvent envoyer des demandes avec priorité et suivi de statut.</p>
-    </div>
-</section>
 {% endblock %}
