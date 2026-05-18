@@ -17,9 +17,17 @@ def inscription(request):
         form = InscriptionForm(request.POST, request.FILES)
 
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.role = 'proprietaire'
+            user.save()
+
             login(request, user)
-            messages.success(request, "Votre compte a été créé avec succès.")
+
+            messages.success(
+                request,
+                "Votre compte propriétaire a été créé avec succès."
+            )
+
             return redirect('accounts:dashboard')
     else:
         form = InscriptionForm()

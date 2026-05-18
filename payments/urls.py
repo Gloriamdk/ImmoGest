@@ -11,6 +11,12 @@ urlpatterns = [
     path('mes-paiements/', views.mes_paiements, name='mes_paiements'),
 
     path(
+    'payer-plusieurs-mois/',
+    views.payer_plusieurs_mois,
+    name='payer_plusieurs_mois'
+    ),
+
+    path(
         'locataire/<int:pk>/historique/',
         views.paiements_locataire,
         name='paiements_locataire'

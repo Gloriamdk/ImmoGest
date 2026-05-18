@@ -379,6 +379,28 @@ def modifier_locataire(request, pk):
 
 @login_required
 @proprietaire_required
+def supprimer_locataire(request, pk):
+    proprietaire = request.user.profil_proprietaire
+
+    locataire = get_object_or_404(
+        ProfilLocataire,
+        pk=pk,
+        proprietaire=proprietaire
+    )
+
+    if request.method == 'POST':
+        user = locataire.user
+        user.delete()
+
+        messages.success(request, "Locataire supprimé avec succès.")
+        return redirect('properties:liste_locataires')
+
+    return render(request, 'properties/confirmer_suppression_locataire.html', {
+        'locataire': locataire
+    })
+
+@login_required
+@proprietaire_required
 def ajouter_locataire(request):
     proprietaire = request.user.profil_proprietaire
     User = get_user_model()
@@ -394,13 +416,19 @@ def ajouter_locataire(request):
             messages.error(request, "Ce nom d'utilisateur existe déjà.")
             return redirect('properties:ajouter_locataire')
 
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Cet email existe déjà.")
+            return redirect('properties:ajouter_locataire')
+
         user = User.objects.create_user(
             username=username,
             email=email,
             password=password,
-            role='locataire',
-            telephone=telephone
+            role='locataire'
         )
+
+        user.telephone = telephone
+        user.save()
 
         profil_locataire = user.profil_locataire
         profil_locataire.proprietaire = proprietaire

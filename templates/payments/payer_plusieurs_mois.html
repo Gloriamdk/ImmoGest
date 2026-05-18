@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <h1>Payer plusieurs mois</h1>
+
+    <p>
+        Contrat : <strong>{{ contrat.bien.titre }}</strong>
+    </p>
+
+    <p>
+        Loyer mensuel :
+        <strong>{{ contrat.montant_loyer }} FCFA</strong>
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="action-btn">
+            Envoyer le paiement
+        </button>
+
+        <a href="{% url 'payments:mes_paiements' %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+</div>
+
+{% endblock %}

@@ -61,7 +61,9 @@
     <div class="dashboard-card">
         <h2>Maintenance</h2>
         <p>Envoyez une demande de réparation ou suivez vos tickets.</p>
-        <a href="#" class="btn-link">Bientôt disponible</a>
+        <a href="{% url 'maintenance:liste_demandes' %}" class="btn-link">
+        Ouvrir maintenance
+        </a>
     </div>
 </section>
 {% else %}

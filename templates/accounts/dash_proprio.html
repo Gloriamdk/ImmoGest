@@ -4,7 +4,7 @@
 <section class="dashboard-header">
     <div>
         <h1>Tableau de bord propriétaire</h1>
-        <p>Bienvenue {{ user.username }}. Voici un aperçu de votre activité immobilière.</p>
+        <p>Bienvenue {{ user.username }}.</p>
     </div>
 </section>
 
@@ -56,7 +56,9 @@
     <div class="dashboard-card">
         <h2>Maintenance</h2>
         <p>Consultez les réclamations envoyées par vos locataires.</p>
-        <a href="#" class="btn-link">Bientôt disponible</a>
+        <a href="{% url 'maintenance:liste_demandes' %}" class="btn-link">
+        Voir les demandes
+        </a>
     </div>
 </section>
 {% endblock %}

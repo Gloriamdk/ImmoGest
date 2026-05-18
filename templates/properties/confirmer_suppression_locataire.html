@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+<h1>
+Supprimer locataire
+</h1>
+
+<p>
+
+Voulez-vous supprimer :
+
+<strong>
+
+{{ locataire.user.username }}
+
+</strong>
+
+?
+
+</p>
+
+<form method="post">
+
+{% csrf_token %}
+
+<button
+type="submit"
+class="danger-btn"
+>
+
+Supprimer définitivement
+
+</button>
+
+<a
+href="{% url 'properties:detail_locataire' locataire.pk %}"
+class="btn-secondary"
+>
+
+Annuler
+
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

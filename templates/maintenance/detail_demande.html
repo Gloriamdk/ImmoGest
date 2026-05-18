@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>{{ demande.titre }}</h1>
+        <p>
+            Logement : {{ demande.contrat.bien.titre }} |
+            Statut : {{ demande.get_statut_display }}
+        </p>
+    </div>
+
+    <a href="{% url 'maintenance:liste_demandes' %}" class="btn-secondary">
+        Retour
+    </a>
+</section>
+
+<div class="maintenance-chat-card">
+    <div id="messages-box" class="maintenance-messages"></div>
+
+    <form id="message-form" method="post" class="maintenance-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Envoyer</button>
+    </form>
+</div>
+
+<script>
+    const messagesBox = document.getElementById('messages-box');
+    const messageForm = document.getElementById('message-form');
+
+    function chargerMessages() {
+        fetch("{% url 'maintenance:messages_json' demande.pk %}")
+            .then(response => response.json())
+            .then(data => {
+                messagesBox.innerHTML = '';
+
+                data.messages.forEach(message => {
+                    const div = document.createElement('div');
+                    div.classList.add('maintenance-message');
+
+                    if (message.auteur === "{{ user.username }}") {
+                        div.classList.add('message-moi');
+                    } else {
+                        div.classList.add('message-autre');
+                    }
+
+                    div.innerHTML = `
+                        <strong>${message.auteur}</strong>
+                        <p>${message.contenu}</p>
+                        <small>${message.date}</small>
+                    `;
+
+                    messagesBox.appendChild(div);
+                });
+
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            });
+    }
+
+    messageForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(messageForm);
+
+        fetch("", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                messageForm.reset();
+                chargerMessages();
+            }
+        });
+    });
+
+    chargerMessages();
+    setInterval(chargerMessages, 2000);
+</script>
+{% endblock %}

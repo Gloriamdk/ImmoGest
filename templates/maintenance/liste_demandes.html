@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Maintenance</h1>
+        <p>Suivi des demandes et messages entre locataire et propriétaire.</p>
+    </div>
+
+    {% if user.role == 'locataire' %}
+        <a href="{% url 'maintenance:nouvelle_demande' %}" class="action-btn">
+            Nouvelle demande
+        </a>
+    {% endif %}
+</section>
+
+<section class="table-card">
+    {% if demandes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Sujet</th>
+                    <th>Logement</th>
+                    <th>Statut</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for demande in demandes %}
+                    <tr>
+                        <td>{{ demande.titre }}</td>
+                        <td>{{ demande.contrat.bien.titre }}</td>
+                        <td>{{ demande.get_statut_display }}</td>
+                        <td>{{ demande.created_at|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <a href="{% url 'maintenance:detail_demande' demande.pk %}" class="btn-link">
+                                Ouvrir
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <h2>Aucune demande</h2>
+            <p>Il n’y a pas encore de demande de maintenance.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

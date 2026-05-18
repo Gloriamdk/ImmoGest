@@ -7,6 +7,16 @@
         <p>Dossier du locataire.</p>
     </div>
 
+    <div class="actions-row">
+    <a href="{% url 'properties:modifier_locataire' locataire.pk %}" class="action-btn">
+        Modifier
+    </a>
+
+    <a href="{% url 'properties:supprimer_locataire' locataire.pk %}" class="danger-btn">
+        Supprimer
+    </a>
+</div>
+
     <a href="{% url 'properties:liste_locataires' %}" class="btn-secondary">
         Retour aux locataires
     </a>
@@ -84,7 +94,7 @@
                 <td>{{ paiement.montant }} FCFA</td>
                 <td>{{ paiement.get_statut_display }}</td>
                 
-                <form method="post" action="{% url 'payments:marquer_paiement_mois' contrat.pk %}">
+                <form method="post" action="{% url 'payments:marquer_paiement_mois' paiement.contrat.pk %}"></form>
                     {% csrf_token %}
 
                     <label>Date de paiement</label>

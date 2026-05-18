@@ -15,7 +15,6 @@ class InscriptionForm(UserCreationForm):
         fields = [
             'username',
             'email',
-            'role',
             'telephone',
             'photo',
             'password1',
@@ -24,7 +23,6 @@ class InscriptionForm(UserCreationForm):
 
         labels = {
             'username': "Nom d'utilisateur",
-            'role': 'Rôle',
             'telephone': 'Téléphone',
             'photo': 'Photo de profil',
         }

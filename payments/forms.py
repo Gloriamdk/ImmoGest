@@ -51,3 +51,26 @@ class PaiementForm(forms.ModelForm):
             )
 
         return montant
+
+class PaiementMultipleLocataireForm(forms.Form):
+    mois_depart = forms.DateField(
+        label='Premier mois payé',
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
+    nombre_mois = forms.IntegerField(
+        label='Nombre de mois à payer',
+        min_value=1,
+        max_value=12
+    )
+
+    mode_paiement = forms.ChoiceField(
+        label='Mode de paiement',
+        choices=Paiement.MODE_CHOICES
+    )
+
+    note = forms.CharField(
+        label='Note',
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 3})
+    )

@@ -7,9 +7,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from accounts.decorators import proprietaire_required
 from properties.models import ContratBail
 
-from .forms import PaiementForm
+from .forms import PaiementForm, PaiementMultipleLocataireForm  
 from .models import Paiement
+from datetime import date
 
+def ajouter_mois(date_base, nombre):
+    mois = date_base.month - 1 + nombre
+    annee = date_base.year + mois // 12
+    mois = mois % 12 + 1
+
+    return date(annee, mois, 1)
 
 @login_required
 @proprietaire_required
@@ -163,21 +170,6 @@ def mes_paiements(request):
     })
 
 @login_required
-def mes_paiements(request):
-    if request.user.role != 'locataire':
-        return redirect('accounts:dashboard')
-
-    locataire = request.user.profil_locataire
-
-    paiements = Paiement.objects.filter(
-        contrat__locataire=locataire
-    )
-
-    return render(request, 'payments/mes_paiements.html', {
-        'paiements': paiements
-    })
-
-@login_required
 @proprietaire_required
 def marquer_paiement_mois(request, pk):
     proprietaire = request.user.profil_proprietaire
@@ -240,4 +232,75 @@ def paiements_locataire(request, pk):
     return render(request, 'payments/paiements_locataire.html', {
         'locataire': locataire,
         'paiements': paiements
+    })
+
+@login_required
+def payer_plusieurs_mois(request):
+    if request.user.role != 'locataire':
+        return redirect('accounts:dashboard')
+
+    locataire = request.user.profil_locataire
+
+    contrat = ContratBail.objects.filter(
+        locataire=locataire,
+        statut=ContratBail.ACTIF,
+        is_archived=False
+    ).first()
+
+    if not contrat:
+        messages.error(request, "Vous n'avez aucun contrat actif.")
+        return redirect('payments:mes_paiements')
+
+    if request.method == 'POST':
+        form = PaiementMultipleLocataireForm(request.POST)
+
+        if form.is_valid():
+            mois_depart = form.cleaned_data['mois_depart'].replace(day=1)
+            nombre_mois = form.cleaned_data['nombre_mois']
+            mode_paiement = form.cleaned_data['mode_paiement']
+            note = form.cleaned_data['note']
+
+            paiements_crees = 0
+            paiements_existants = 0
+
+            for i in range(nombre_mois):
+                mois_concerne = ajouter_mois(mois_depart, i)
+
+                paiement, created = Paiement.objects.get_or_create(
+                    contrat=contrat,
+                    mois_concerne=mois_concerne,
+                    defaults={
+                        'montant': contrat.montant_loyer,
+                        'date_paiement': timezone.now().date(),
+                        'mode_paiement': mode_paiement,
+                        'statut': Paiement.EN_ATTENTE,
+                        'note': note
+                    }
+                )
+
+                if created:
+                    paiements_crees += 1
+                else:
+                    paiements_existants += 1
+
+            if paiements_crees > 0:
+                messages.success(
+                    request,
+                    f"{paiements_crees} paiement(s) envoyé(s) au propriétaire."
+                )
+
+            if paiements_existants > 0:
+                messages.info(
+                    request,
+                    f"{paiements_existants} mois étaient déjà enregistrés."
+                )
+
+            return redirect('payments:mes_paiements')
+
+    else:
+        form = PaiementMultipleLocataireForm()
+
+    return render(request, 'payments/payer_plusieurs_mois.html', {
+        'form': form,
+        'contrat': contrat
     })

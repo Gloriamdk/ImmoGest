@@ -2,6 +2,7 @@
 
 {% block content %}
 <section class="page-header">
+
     <div>
         <h1>Mes biens immobiliers</h1>
         <p>Liste de tous vos biens enregistrés.</p>
@@ -10,7 +11,11 @@
     <a href="{% url 'properties:ajouter_bien' %}" class="btn-link">
         Ajouter un bien
     </a>
-    <form method="get" class="search-form">
+
+</section>
+
+<form method="get" class="search-form">
+
     <input
         type="text"
         name="q"
@@ -18,14 +23,16 @@
         value="{{ query }}"
     >
 
-    <button type="submit">Rechercher</button>
+    <button type="submit">
+        Rechercher
+    </button>
 
     <a href="{% url 'properties:biens_archives' %}" class="btn-secondary">
         Voir les archives
     </a>
+
 </form>
 
-</section>
 
 {% if biens %}
 <div class="table-card">

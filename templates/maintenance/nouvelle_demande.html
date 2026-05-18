@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1>Nouvelle demande de maintenance</h1>
+        <p>Décrivez le problème rencontré dans votre logement.</p>
+    </div>
+</section>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Envoyer la demande</button>
+
+        <a href="{% url 'maintenance:liste_demandes' %}" class="btn-secondary">
+            Retour
+        </a>
+    </form>
+</div>
+{% endblock %}

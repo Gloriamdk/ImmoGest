@@ -25,14 +25,14 @@
                 <a href="{% url 'properties:liste_contrats' %}">Contrats</a>
                 <a href="{% url 'properties:liste_locataires' %}">Locataires</a>
                 <a href="{% url 'payments:liste_paiements' %}">Paiements</a>
-                <a href="#">Maintenance</a>
+                <a href="{% url 'maintenance:liste_demandes' %}">Maintenance</a>
             {% endif %}
 
             {% if user.role == 'locataire' %}
                 <a href="#">Mon logement</a>
                 <a href="{% url 'properties:mon_contrat' %}">Mon contrat</a>
                 <a href="{% url 'payments:mes_paiements' %}">Mes paiements</a>
-                <a href="#">Maintenance</a>
+                <a href="{% url 'maintenance:liste_demandes' %}">Maintenance</a>
             {% endif %}
 
             <a href="{% url 'accounts:profil' %}">Profil</a>

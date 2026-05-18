@@ -20,7 +20,10 @@ urlpatterns = [
 
     path('locataires/<int:pk>/', views.detail_locataire, name='detail_locataire'),
 
+    
     path('locataires/<int:pk>/modifier/', views.modifier_locataire, name='modifier_locataire'),
+    
+    path('locataires/<int:pk>/supprimer/', views.supprimer_locataire, name='supprimer_locataire'),
 
     path('mon-contrat/', views.mon_contrat, name='mon_contrat'),
     
